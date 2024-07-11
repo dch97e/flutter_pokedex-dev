@@ -112,92 +112,97 @@ class _PokemonListPageState extends State<PokemonListPage>
     int crossAxisCount =
         !kIsWeb ? (screenWidth / 140).floor() : (screenWidth / 200).floor();
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          isSearching
-              ? IconButton(
-                  onPressed: () {
-                    isSearching = false;
-                    setState(() {});
-                  },
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ))
-              : IconButton(
-                  onPressed: () {
-                    isSearching = true;
-                    setState(() {});
-                  },
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ))
-        ],
-        backgroundColor: AppColors.bostonRed.withOpacity(0.5),
-        title: isSearching
-            ? SizedBox(
-                height: kToolbarHeight * 0.7,
-                child: TextField(
-                  decoration: InputDecoration(
-                    focusColor: Colors.white,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: const BorderSide(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            isSearching
+                ? IconButton(
+                    onPressed: () {
+                      isSearching = false;
+                      setState(() {});
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ))
+                : IconButton(
+                    onPressed: () {
+                      isSearching = true;
+                      setState(() {});
+                    },
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ))
+          ],
+          backgroundColor: AppColors.bostonRed.withOpacity(0.5),
+          title: isSearching
+              ? SizedBox(
+                  height: kToolbarHeight * 0.7,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      focusColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: const BorderSide(color: Colors.white),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                      borderSide: const BorderSide(color: Colors.white),
-                    ),
+                    controller: _searchController,
+                    onChanged: (value) {
+                      filteredList.clear();
+                      filteredList.addAll(notifier.pokemonList.where(
+                          (element) => element.name
+                              .toLowerCase()
+                              .contains(value.toLowerCase())));
+                      setState(() {});
+                    },
                   ),
-                  controller: _searchController,
-                  onChanged: (value) {
-                    filteredList.clear();
-                    filteredList.addAll(notifier.pokemonList.where((element) =>
-                        element.name
-                            .toLowerCase()
-                            .contains(value.toLowerCase())));
-                    setState(() {});
-                  },
+                )
+              : Text(
+                  AppLocalizations.of(context)!.pokemon_title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white),
                 ),
-              )
-            : Text(
-                AppLocalizations.of(context)!.pokemon_title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Colors.white),
-              ),
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: [
-          GridView.builder(
-            controller: controller,
-            padding: const EdgeInsets.all(10),
-            itemCount: filteredList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: kIsWeb ? crossAxisCount : 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 1.40),
-            itemBuilder: (context, index) {
-              return PokedexGridCard(
-                  pokemon: filteredList[index],
-                  index: index + 1,
-                  route: NavigationRoutes.pokemonDetailRoute);
-            },
-          ),
-          // if (loadingNext)
-          //   Align(
-          //       alignment: Alignment.bottomCenter,
-          //       child: Lottie.asset("assets/images/pikachu.json", height: 100))
-        ],
+          centerTitle: true,
+        ),
+        body: Stack(
+          children: [
+            GridView.builder(
+              controller: controller,
+              padding: const EdgeInsets.all(10),
+              itemCount: filteredList.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: kIsWeb ? crossAxisCount : 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.40),
+              itemBuilder: (context, index) {
+                return PokedexGridCard(
+                    pokemon: filteredList[index],
+                    index: index + 1,
+                    route: NavigationRoutes.pokemonDetailRoute);
+              },
+            ),
+            // if (loadingNext)
+            //   Align(
+            //       alignment: Alignment.bottomCenter,
+            //       child: Lottie.asset("assets/images/pikachu.json", height: 100))
+          ],
+        ),
       ),
     );
   }
