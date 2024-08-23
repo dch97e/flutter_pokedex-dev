@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_pokedex/model/pokemon.dart';
 import 'package:flutter_pokedex/model/pokemon_list.dart';
 
-class PokemonProvider extends ChangeNotifier {
+class PokemonProvider with ChangeNotifier, DiagnosticableTreeMixin {
   Pokemonlist pokemonHome = Pokemonlist();
   final List<Result> pokemonHomeList = [];
   final List<Pokemon> pokemonList = [];
