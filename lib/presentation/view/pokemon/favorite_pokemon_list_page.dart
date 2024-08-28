@@ -114,13 +114,6 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-// Obtener el ancho total disponible
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // Calcular el número de columnas
-    int crossAxisCount = (screenWidth / 140).floor();
-
     return Scaffold(
       appBar: AppBar(
         actions: [

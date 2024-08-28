@@ -41,22 +41,19 @@ class PokemonViewModel extends BaseViewModel {
     });
   }
 
-  Future<Pokemon?> getPokemonById(String url, int index) async {
+  Future<void> getPokemonById(String url, int index) async {
     detailPokemonState.add(ResourceState.loading());
 
-    _pokemonRepository.getPokemonById(url, index).then((value) {
-      detailPokemonState.add(ResourceState.completed(value));
-      return value;
-    }).catchError((e) {
-      detailPokemonState.add(ResourceState.error(
-          PokemonErrorBuilder.create(e, AppAction.GET_POKEMON_BY_ID).build()));
-    });
-    return null;
+    _pokemonRepository
+        .getPokemonById(url, index)
+        .then((value) => detailPokemonState.add(ResourceState.completed(value)))
+        .catchError((e) => detailPokemonState.add(ResourceState.error(
+            PokemonErrorBuilder.create(e, AppAction.GET_POKEMON_BY_ID)
+                .build())));
   }
 
   Future<void> fetchNextPokemons(String nextRequest) async {
     pokemonNextListState.add(ResourceState.loading());
-
     _pokemonRepository
         .getNextPokemons(nextRequest)
         .then(

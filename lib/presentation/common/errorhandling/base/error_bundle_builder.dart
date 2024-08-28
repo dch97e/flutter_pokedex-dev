@@ -18,12 +18,12 @@ abstract class ErrorBundleBuilder {
     AppError appError = AppError.UNKNOWN;
 
     switch (_exception.runtimeType) {
-      case HTTPException:
+      case HTTPException _:
         return handle((_exception as HTTPException), _appAction);
-      case TimeoutException:
+      case TimeoutException _:
         appError = AppError.TIMEOUT;
         break;
-      case SocketException:
+      case SocketException _:
         appError = AppError.NO_INTERNET;
         break;
     }

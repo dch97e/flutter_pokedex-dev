@@ -5,8 +5,7 @@ import 'package:flutter_pokedex/presentation/common/errorhandling/base/error_bun
 import 'package:flutter_pokedex/presentation/common/errorhandling/base/error_bundle_builder.dart';
 
 class PokemonErrorBuilder extends ErrorBundleBuilder {
-  PokemonErrorBuilder.create(Exception exception, AppAction appAction)
-      : super.create(exception, appAction);
+  PokemonErrorBuilder.create(super.exception, super.appAction) : super.create();
 
   @override
   ErrorBundle handle(HTTPException exception, AppAction appAction) {

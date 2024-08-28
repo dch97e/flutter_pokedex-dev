@@ -9,7 +9,7 @@ import 'package:flutter_pokedex/presentation/view/pokemon/viewmodel/pokemon_view
 import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
