@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_pokedex/data/remote/error/remote_error_mapper.dart';
 import 'package:flutter_pokedex/data/remote/http_client.dart';
 import 'package:flutter_pokedex/data/remote/network_endpoints.dart';
@@ -11,9 +10,9 @@ class PokemonRemoteImpl {
 
   Future<Pokemonlist> getPokemons() async {
     try {
-      dynamic response = await _httpClient.dio.get(!kIsWeb
-          ? NetworkEndpoints.pokemonListUrl
-          : NetworkEndpoints.pokemonListWebUrl);
+      dynamic response = await _httpClient.dio.get(
+          NetworkEndpoints.pokemonListUrl,
+          data: {"offset": 0, "limit": 20});
 
       Pokemonlist list = Pokemonlist.fromJson(response.data);
 

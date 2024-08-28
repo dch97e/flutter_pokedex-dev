@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_pokedex/di/app_modules.dart';
 import 'package:flutter_pokedex/model/pokemon.dart';
@@ -10,9 +11,10 @@ import 'package:flutter_pokedex/presentation/common/widget/error/error_overlay.d
 import 'package:flutter_pokedex/presentation/common/widget/pokemon/pokedex_grid_card.dart';
 import 'package:flutter_pokedex/presentation/navigation/navigation_routes.dart';
 import 'package:flutter_pokedex/presentation/view/pokemon/viewmodel/pokemon_view_model.dart';
+import 'package:lottie/lottie.dart';
 
 class PokemonListPage extends StatefulWidget {
-  const PokemonListPage({Key? key}) : super(key: key);
+  const PokemonListPage({super.key});
 
   @override
   State<PokemonListPage> createState() => _PokemonListPageState();
@@ -24,94 +26,43 @@ class _PokemonListPageState extends State<PokemonListPage>
   final _pokemonViewModel = inject<PokemonViewModel>();
   final notifier = inject<PokemonProvider>();
   bool loadingNext = false;
-  // bool initLoading = true;
   bool isSearching = false;
-  int index = kIsWeb ? 0 : 20;
+  int index = 20;
   List<Pokemon> filteredList = [];
   final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     if (notifier.pokemonList.isNotEmpty) {
       filteredList.addAll(notifier.pokemonList);
     }
-    if (kIsWeb) {
-      _pokemonViewModel.fetchPokemons();
-    } else {
-      _pokemonViewModel.getPokemonById(
-          notifier.pokemonHomeList[notifier.pokemonList.length].url,
-          notifier.pokemonList.length);
+    // controller.addListener(() {
+    //   if (controller.position.pixels == controller.position.maxScrollExtent) {
+    //     _loadMoreData();
+    //   }
+    // });
+    _pokemonViewModel.getPokemonById(
+        notifier.pokemonHomeList[notifier.pokemonList.length].url,
+        notifier.pokemonList.length);
+
+    streamListeners();
+  }
+
+  Future<void> _loadMoreData() async {
+    if (!loadingNext) {
+      setState(() {
+        // loadingNext = true;
+      });
+      if (notifier.pokemonHome.next != null) {
+        _pokemonViewModel.fetchNextPokemons(notifier.pokemonHome.next!);
+      }
     }
-    _pokemonViewModel.pokemonListState.stream.listen((state) {
-      switch (state.status) {
-        case Status.LOADING:
-          break;
-        case Status.COMPLETED:
-          notifier.pokemonHome = state.data;
-          if (notifier.pokemonHome.results != null) {
-            notifier.addAllResultsToList(notifier.pokemonHome.results!);
-          }
-          if (index < 151) {
-            _pokemonViewModel.getPokemonById(
-                notifier.pokemonHomeList[index].url, index);
-          }
-          index++;
-
-          setState(() {});
-          break;
-        case Status.ERROR:
-          ErrorOverlay.of(context).show(state.error, onRetry: () {
-            _pokemonViewModel.fetchNextPokemons(notifier.pokemonHome.next!);
-          });
-          break;
-        default:
-          break;
-      }
-    });
-    _pokemonViewModel.detailPokemonState.stream.listen((state) {
-      switch (state.status) {
-        case Status.LOADING:
-          break;
-        case Status.COMPLETED:
-          Pokemon pokemon = state.data;
-
-          if (index < notifier.pokemonHomeList.length && index <= 151) {
-            notifier.pokemonList.add(pokemon);
-            filteredList.add(pokemon);
-            _pokemonViewModel.getPokemonById(
-                notifier.pokemonHomeList[index].url, index);
-            index++;
-            setState(() {});
-          } else {
-            notifier.pokemonList.add(pokemon);
-            filteredList.add(pokemon);
-
-            loadingNext = false;
-            setState(() {});
-          }
-
-          break;
-        case Status.ERROR:
-          ErrorOverlay.of(context).show(state.error, onRetry: () {
-            _pokemonViewModel.fetchPokemons();
-          });
-          break;
-        default:
-          break;
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // Obtener el ancho total disponible
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // Calcular el número de columnas
-    int crossAxisCount =
-        !kIsWeb ? (screenWidth / 140).floor() : (screenWidth / 200).floor();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -163,7 +114,7 @@ class _PokemonListPageState extends State<PokemonListPage>
                     onChanged: (value) {
                       filteredList.clear();
                       filteredList.addAll(notifier.pokemonList.where(
-                          (element) => element.name
+                          (element) => element.name!
                               .toLowerCase()
                               .contains(value.toLowerCase())));
                       setState(() {});
@@ -185,8 +136,8 @@ class _PokemonListPageState extends State<PokemonListPage>
               controller: controller,
               padding: const EdgeInsets.all(10),
               itemCount: filteredList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: kIsWeb ? crossAxisCount : 2,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   childAspectRatio: 1.40),
@@ -197,10 +148,11 @@ class _PokemonListPageState extends State<PokemonListPage>
                     route: NavigationRoutes.pokemonDetailRoute);
               },
             ),
-            // if (loadingNext)
-            //   Align(
-            //       alignment: Alignment.bottomCenter,
-            //       child: Lottie.asset("assets/images/pikachu.json", height: 100))
+            if (loadingNext)
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child:
+                      Lottie.asset("assets/images/pikachu.json", height: 100))
           ],
         ),
       ),
@@ -215,4 +167,93 @@ class _PokemonListPageState extends State<PokemonListPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  void streamListeners() {
+    _pokemonViewModel.pokemonListState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          break;
+        case Status.COMPLETED:
+          notifier.pokemonHome = state.data;
+          if (notifier.pokemonHome.results != null) {
+            notifier.addAllResultsToList(notifier.pokemonHome.results!);
+          }
+          if (index < 151) {
+            _pokemonViewModel.getPokemonById(
+                notifier.pokemonHomeList[index].url, index);
+          }
+          index++;
+
+          setState(() {});
+          break;
+        case Status.ERROR:
+          ErrorOverlay.of(context).show(state.error, onRetry: () {
+            _pokemonViewModel.fetchNextPokemons(notifier.pokemonHome.next!);
+          });
+          break;
+        default:
+          break;
+      }
+    });
+    _pokemonViewModel.pokemonNextListState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          break;
+        case Status.COMPLETED:
+          notifier.pokemonHome = state.data;
+          if (notifier.pokemonHome.results != null) {
+            notifier.addAllResultsToList(notifier.pokemonHome.results!);
+          }
+
+          _pokemonViewModel.getPokemonById(
+              notifier.pokemonHomeList[index].url, index);
+
+          index++;
+
+          setState(() {});
+          break;
+        case Status.ERROR:
+          ErrorOverlay.of(context).show(state.error, onRetry: () {
+            _pokemonViewModel.fetchNextPokemons(notifier.pokemonHome.next!);
+          });
+          break;
+        default:
+          break;
+      }
+    });
+    _pokemonViewModel.detailPokemonState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          break;
+        case Status.COMPLETED:
+          Pokemon pokemon = state.data;
+
+          if (index < notifier.pokemonHomeList.length) {
+            if (pokemon.sprites!.front_default != null) {
+              notifier.pokemonList.add(pokemon);
+              filteredList.add(pokemon);
+            }
+            _pokemonViewModel.getPokemonById(
+                notifier.pokemonHomeList[index].url, index);
+            index++;
+            setState(() {});
+          } else {
+            notifier.pokemonList.add(pokemon);
+            filteredList.add(pokemon);
+            loadingNext = false;
+            setState(() {});
+            _loadMoreData();
+          }
+
+          break;
+        case Status.ERROR:
+          ErrorOverlay.of(context).show(state.error, onRetry: () {
+            _pokemonViewModel.fetchPokemons();
+          });
+          break;
+        default:
+          break;
+      }
+    });
+  }
 }

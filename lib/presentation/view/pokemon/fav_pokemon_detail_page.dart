@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 //import 'package:share_plus/share_plus.dart';
 
 class FavPokemonDetailPage extends StatefulWidget {
-  const FavPokemonDetailPage({Key? key}) : super(key: key);
+  const FavPokemonDetailPage({super.key});
 
   @override
   State<FavPokemonDetailPage> createState() => _FavPokemonDetailPageState();
@@ -44,7 +44,9 @@ class _FavPokemonDetailPageState extends State<FavPokemonDetailPage>
           break;
         case Status.ERROR:
           LoadingOverlay.hide();
-          ErrorOverlay.of(context).show(event.error, onRetry: () {});
+          if (mounted) {
+            ErrorOverlay.of(context).show(event.error, onRetry: () {});
+          }
           break;
         default:
           LoadingOverlay.hide();
@@ -78,7 +80,7 @@ class _FavPokemonDetailPageState extends State<FavPokemonDetailPage>
           onPressed: (() => context.pop()),
         ),
         title: Text(
-          "${notifier.selectedPokemon!.name[0].toUpperCase()}${notifier.selectedPokemon!.name.substring(1)}",
+          "${notifier.selectedFavouritePokemon!.name![0].toUpperCase()}${notifier.selectedFavouritePokemon!.name!.substring(1)}",
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
         ),
@@ -107,7 +109,7 @@ class _FavPokemonDetailPageState extends State<FavPokemonDetailPage>
         ],
       ),
       backgroundColor: AppColors.getColorType(
-          notifier.selectedPokemon!.types.first.type.name),
+          notifier.selectedFavouritePokemon!.types.first.type!.name!),
       body: BodyWidget(
         animationController: _animationController,
       ),

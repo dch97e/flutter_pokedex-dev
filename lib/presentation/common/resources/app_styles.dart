@@ -33,13 +33,13 @@ class AppStyles {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.getColorType(pokemon.types.first.type.name),
-              AppColors.getColorType(pokemon.types.last.type.name),
+              AppColors.getColorType(pokemon.types.first.type!.name!),
+              AppColors.getColorType(pokemon.types.last.type!.name!),
             ]),
       );
     } else {
       return BoxDecoration(
-        color: AppColors.getColorType(pokemon.types.first.type.name),
+        color: AppColors.getColorType(pokemon.types.first.type!.name!),
       );
     }
   }

@@ -23,28 +23,28 @@ class SpritesRow extends StatelessWidget {
     String url = '';
     switch (index) {
       case 0:
-        url = notifier.selectedPokemon!.sprites.frontDefault;
+        url = notifier.selectedPokemon!.sprites!.front_default ?? "";
         break;
       case 1:
-        url = notifier.selectedPokemon!.sprites.backDefault;
+        url = notifier.selectedPokemon!.sprites!.back_default ?? "";
         break;
       case 2:
-        url = notifier.selectedPokemon!.sprites.frontFemale ?? '';
+        url = notifier.selectedPokemon!.sprites!.front_female ?? '';
         break;
       case 3:
-        url = notifier.selectedPokemon!.sprites.backFemale ?? '';
+        url = notifier.selectedPokemon!.sprites!.back_female ?? '';
         break;
       case 4:
-        url = notifier.selectedPokemon!.sprites.frontShiny;
+        url = notifier.selectedPokemon!.sprites!.front_shiny ?? "";
         break;
       case 5:
-        url = notifier.selectedPokemon!.sprites.backShiny;
+        url = notifier.selectedPokemon!.sprites!.back_shiny ?? "";
         break;
       case 6:
-        url = notifier.selectedPokemon!.sprites.frontShinyFemale ?? '';
+        url = notifier.selectedPokemon!.sprites!.front_shiny_female ?? '';
         break;
       case 7:
-        url = notifier.selectedPokemon!.sprites.backShinyFemale ?? '';
+        url = notifier.selectedPokemon!.sprites!.back_shiny_female ?? '';
         break;
     }
 

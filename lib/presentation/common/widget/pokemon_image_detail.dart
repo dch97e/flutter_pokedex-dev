@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pokedex/di/app_modules.dart';
 import 'package:flutter_pokedex/presentation/common/canvas/white_pokeball_canvas.dart';
@@ -35,13 +34,11 @@ class PokemonImageDetail extends StatelessWidget {
                     );
                   },
                   child: CustomPaint(
-                    size: kIsWeb
-                        ? Size(400, (400 * 1.0040160642570282).toDouble())
-                        : Size(200, (200 * 1.0040160642570282).toDouble()),
+                    size: Size(200, (200 * 1.0040160642570282).toDouble()),
                     painter: PokeballLogoPainter(
                         color: Theme.of(context)
                             .colorScheme
-                            .background
+                            .surface
                             .withOpacity(0.3)),
                   ),
                 ),
@@ -51,7 +48,7 @@ class PokemonImageDetail extends StatelessWidget {
                   imageUrl:
                       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${notifier.selectedPokemon!.id}.png',
                   fit: BoxFit.cover,
-                  height: kIsWeb ? 400 : 200,
+                  height: 200,
                 ),
               ),
               Align(

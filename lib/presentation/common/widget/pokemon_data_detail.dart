@@ -23,12 +23,12 @@ class PokemonDataDetail extends StatelessWidget {
             style: AppStyles.appTheme.textTheme.bodyMedium,
           ),
           Text(
-            '${AppLocalizations.of(context)!.main_type} ${notifier.selectedPokemon!.types.first.type.name}',
+            '${AppLocalizations.of(context)!.main_type} ${notifier.selectedPokemon!.types.first.type!.name}',
             style: AppStyles.appTheme.textTheme.bodyMedium,
           ),
           notifier.selectedPokemon!.types.length == 2
               ? Text(
-                  '${AppLocalizations.of(context)!.sec_type} ${notifier.selectedPokemon!.types[1].type.name}',
+                  '${AppLocalizations.of(context)!.sec_type} ${notifier.selectedPokemon!.types[1].type!.name}',
                   style: AppStyles.appTheme.textTheme.bodyMedium,
                 )
               : Container(),

@@ -1,10 +1,6 @@
-import 'dart:convert';
+import 'package:json/json.dart';
 
-Pokemonlist pokemonlistFromJson(String str) =>
-    Pokemonlist.fromJson(json.decode(str));
-
-String pokemonlistToJson(Pokemonlist data) => json.encode(data.toJson());
-
+@JsonCodable()
 class Pokemonlist {
   int? count;
   String? next;
@@ -18,21 +14,6 @@ class Pokemonlist {
     this.results,
   });
 
-  factory Pokemonlist.fromJson(Map<String, dynamic> json) => Pokemonlist(
-        count: json["count"],
-        next: json["next"],
-        previous: json["previous"],
-        results:
-            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "count": count,
-        "next": next,
-        "previous": previous,
-        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
-      };
-
   void add(Pokemonlist list) {
     if (list.results != null) {
       for (var element in list.results!) {
@@ -42,6 +23,7 @@ class Pokemonlist {
   }
 }
 
+@JsonCodable()
 class Result {
   final String name;
   final String url;
@@ -50,14 +32,4 @@ class Result {
     required this.name,
     required this.url,
   });
-
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
-        name: json["name"],
-        url: json["url"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "url": url,
-      };
 }

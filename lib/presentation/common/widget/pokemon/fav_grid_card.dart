@@ -30,10 +30,10 @@ class FavGridCard extends StatelessWidget {
           children: [
             Image(
                 image: CachedNetworkImageProvider(
-              pokemon.sprites.frontDefault,
+              pokemon.sprites!.front_default!,
             )),
             Text(
-              '${pokemon.gameIndices[3].gameIndex} - ${pokemon.name}',
+              '${pokemon.game_indices[3].game_index} - ${pokemon.name}',
               style: const TextStyle(color: Colors.black),
             ),
           ],

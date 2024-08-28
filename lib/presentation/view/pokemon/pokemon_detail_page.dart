@@ -13,8 +13,8 @@ import 'package:go_router/go_router.dart';
 
 class PokemonDetailPage extends StatefulWidget {
   const PokemonDetailPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PokemonDetailPage> createState() => _PokemonDetailPageState();
@@ -47,7 +47,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage>
           break;
         case Status.ERROR:
           LoadingOverlay.hide();
-          ErrorOverlay.of(context).show(event.error, onRetry: () {});
+          if (mounted) {
+            ErrorOverlay.of(context).show(event.error, onRetry: () {});
+          }
           break;
         default:
           LoadingOverlay.hide();
@@ -82,7 +84,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage>
           onPressed: (() => context.pop()),
         ),
         title: Text(
-          "${notifier.selectedPokemon!.name[0].toUpperCase()}${notifier.selectedPokemon!.name.substring(1)}",
+          "${notifier.selectedPokemon!.name![0].toUpperCase()}${notifier.selectedPokemon!.name!.substring(1)}",
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
         ),
@@ -111,7 +113,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage>
         ],
       ),
       backgroundColor: AppColors.getColorType(
-          notifier.selectedPokemon!.types.first.type.name),
+          notifier.selectedPokemon!.types.first.type!.name!),
       body: BodyWidget(
         animationController: _animationController,
       ),

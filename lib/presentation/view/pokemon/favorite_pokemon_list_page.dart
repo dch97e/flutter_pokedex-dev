@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pokedex/di/app_modules.dart';
 import 'package:flutter_pokedex/model/pokemon.dart';
@@ -14,7 +13,7 @@ import 'package:flutter_pokedex/presentation/navigation/navigation_routes.dart';
 import 'package:flutter_pokedex/presentation/view/pokemon/viewmodel/pokemon_view_model.dart';
 
 class FavPokemonListPage extends StatefulWidget {
-  const FavPokemonListPage({Key? key}) : super(key: key);
+  const FavPokemonListPage({super.key});
 
   @override
   State<FavPokemonListPage> createState() => _FavPokemonListPageState();
@@ -36,7 +35,7 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
     _pokemonViewModel.pokemonFavoriteListState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingOverlay.show(context);
+          if (mounted) LoadingOverlay.show(context);
           break;
         case Status.COMPLETED:
           LoadingOverlay.hide();
@@ -49,9 +48,11 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
           break;
         case Status.ERROR:
           LoadingOverlay.hide();
-          ErrorOverlay.of(context).show(state.error, onRetry: () {
-            _pokemonViewModel.fetchFavoritePokemons();
-          });
+          if (mounted) {
+            ErrorOverlay.of(context).show(state.error, onRetry: () {
+              _pokemonViewModel.fetchFavoritePokemons();
+            });
+          }
           break;
         default:
           LoadingOverlay.hide();
@@ -73,12 +74,12 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
     types.clear();
 
     for (var element in notifier.pokemonFavouriteList) {
-      if (types.containsKey(element.types.first.type.name)) {
-        int value1 = types[element.types.first.type.name];
-        types.update(element.types.first.type.name, ((value) => value1 + 1));
+      if (types.containsKey(element.types.first.type!.name)) {
+        int value1 = types[element.types.first.type!.name];
+        types.update(element.types.first.type!.name!, ((value) => value1 + 1));
       } else {
         types.update(
-          element.types.first.type.name,
+          element.types.first.type!.name!,
           (value) => value++,
           ifAbsent: () => 1,
         );
@@ -103,7 +104,7 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
     });
 
     if (!equal) {
-      color = AppColors.getColorType(biggerString!);
+      if (biggerString != null) color = AppColors.getColorType(biggerString!);
     } else {
       color = null;
     }
@@ -118,8 +119,7 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
     double screenWidth = MediaQuery.of(context).size.width;
 
     // Calcular el número de columnas
-    int crossAxisCount =
-        !kIsWeb ? (screenWidth / 140).floor() : (screenWidth / 200).floor();
+    int crossAxisCount = (screenWidth / 140).floor();
 
     return Scaffold(
       appBar: AppBar(
@@ -168,7 +168,7 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
                   onChanged: (value) {
                     filteredList.clear();
                     filteredList.addAll(notifier.pokemonFavouriteList.where(
-                        (element) => element.name
+                        (element) => element.name!
                             .toLowerCase()
                             .contains(value.toLowerCase())));
                     setState(() {});
@@ -187,8 +187,8 @@ class _FavPokemonListPageState extends State<FavPokemonListPage>
       body: GridView.builder(
         padding: const EdgeInsets.all(10),
         itemCount: filteredList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: kIsWeb ? crossAxisCount : 2,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             childAspectRatio: 1.40),

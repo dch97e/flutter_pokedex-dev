@@ -7,7 +7,7 @@ class NetworkEndpoints {
   static String artistsUrl =
       "https://5178af27-2e3e-481f-ad80-7c5e7703f0ee.mock.pstmn.io/items";
 
-  static String pokemonListUrl = "${_baseUrl}pokemon?offset=0&limit=151";
+  static String pokemonListUrl = "${_baseUrl}pokemon";
   static String pokemonListWebUrl = "${_baseUrl}pokemon?offset=0&limit=151";
 
   static String pokemonDetailUrl = "${_baseUrl}pokemon/";

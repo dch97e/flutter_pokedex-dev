@@ -29,7 +29,7 @@ class PokedexGridCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColors.getColorType(pokemon.types.first.type.name)),
+            color: AppColors.getColorType(pokemon.types.first.type!.name!)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Stack(
@@ -47,19 +47,20 @@ class PokedexGridCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 7, bottom: 3),
-                  child: SizedBox(
-                    height: 76,
-                    width: 76,
-                    child: Image.network(
-                      pokemon.sprites.frontDefault,
+              if (pokemon.sprites!.front_default != null)
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 7, bottom: 3),
+                    child: SizedBox(
+                      height: 76,
+                      width: 76,
+                      child: Image.network(
+                        pokemon.sprites!.front_default!,
+                      ),
                     ),
                   ),
                 ),
-              ),
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
@@ -82,7 +83,7 @@ class PokedexGridCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}",
+                      "${pokemon.name![0].toUpperCase()}${pokemon.name!.substring(1)}",
                       style: AppStyles.smallTextStyle.copyWith(
                           fontWeight: FontWeight.bold, color: Colors.white),
                     ),
@@ -102,7 +103,7 @@ class PokedexGridCard extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 5),
                                     child: Text(
-                                      type.type.name,
+                                      type.type!.name!,
                                       style: AppStyles.bigTextStyle.copyWith(
                                         fontSize: 10,
                                         color: Colors.white,

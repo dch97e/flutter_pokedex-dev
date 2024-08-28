@@ -5,7 +5,7 @@ import 'package:flutter_pokedex/presentation/common/provider/pokemon_provider.da
 class PokemonTitleInfoWidget extends StatelessWidget {
   final notifier = inject<PokemonProvider>();
 
-  PokemonTitleInfoWidget({Key? key}) : super(key: key);
+  PokemonTitleInfoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class PokemonTitleInfoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${notifier.selectedPokemon!.name[0].toUpperCase()}${notifier.selectedPokemon!.name.substring(1)}",
+                "${notifier.selectedPokemon!.name![0].toUpperCase()}${notifier.selectedPokemon!.name!.substring(1)}",
                 style: textTheme.displayLarge?.copyWith(
                   fontSize: 36,
                   fontWeight: FontWeight.w900,
@@ -50,7 +50,7 @@ class PokemonTitleInfoWidget extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 5),
-                              child: Text(type.type.name,
+                              child: Text(type.type!.name!,
                                   style: textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,

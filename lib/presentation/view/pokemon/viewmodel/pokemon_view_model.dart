@@ -16,6 +16,8 @@ class PokemonViewModel extends BaseViewModel {
 
   StreamController<ResourceState> pokemonListState =
       StreamController<ResourceState>();
+  StreamController<ResourceState> pokemonNextListState =
+      StreamController<ResourceState>();
   StreamController<ResourceState> pokemonFavoriteListState =
       StreamController<ResourceState>();
   StreamController<ResourceState> addFavoritePokemonState =
@@ -53,13 +55,14 @@ class PokemonViewModel extends BaseViewModel {
   }
 
   Future<void> fetchNextPokemons(String nextRequest) async {
-    pokemonListState.add(ResourceState.loading());
+    pokemonNextListState.add(ResourceState.loading());
 
     _pokemonRepository
         .getNextPokemons(nextRequest)
-        .then((value) => pokemonListState.add(ResourceState.completed(value)))
+        .then(
+            (value) => pokemonNextListState.add(ResourceState.completed(value)))
         .catchError((e) {
-      pokemonListState.add(ResourceState.error(
+      pokemonNextListState.add(ResourceState.error(
           PokemonErrorBuilder.create(e, AppAction.GET_POKEMONS).build()));
     });
   }

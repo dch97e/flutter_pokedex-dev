@@ -14,7 +14,8 @@ class AbilitiesData extends StatelessWidget {
       itemCount: notifier.selectedPokemon!.abilities.length,
       itemBuilder: (context, index) {
         return Text(
-          notifier.selectedPokemon!.abilities[index].ability.name.toUpperCase(),
+          notifier.selectedPokemon!.abilities[index].ability!.name!
+              .toUpperCase(),
           style: const TextStyle(color: Colors.black),
         );
       },
