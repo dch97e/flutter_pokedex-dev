@@ -143,6 +143,7 @@ class _PokemonListPageState extends State<PokemonListPage>
                   childAspectRatio: 1.40),
               itemBuilder: (context, index) {
                 return PokedexGridCard(
+                    isFavourite: false,
                     pokemon: filteredList[index],
                     index: index + 1,
                     route: NavigationRoutes.pokemonDetailRoute);

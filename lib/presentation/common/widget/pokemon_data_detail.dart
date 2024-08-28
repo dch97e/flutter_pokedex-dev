@@ -15,23 +15,30 @@ class PokemonDataDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${AppLocalizations.of(context)!.height} ${notifier.selectedPokemon!.height}',
+            '${AppLocalizations.of(context)!.height} ${notifier.isFavourite ? notifier.selectedFavouritePokemon!.height : notifier.selectedPokemon!.height}',
             style: AppStyles.appTheme.textTheme.bodyMedium,
           ),
           Text(
-            '${AppLocalizations.of(context)!.weight} ${notifier.selectedPokemon!.weight}',
+            '${AppLocalizations.of(context)!.weight} ${notifier.isFavourite ? notifier.selectedFavouritePokemon!.weight : notifier.selectedPokemon!.weight}',
             style: AppStyles.appTheme.textTheme.bodyMedium,
           ),
           Text(
-            '${AppLocalizations.of(context)!.main_type} ${notifier.selectedPokemon!.types.first.type!.name}',
+            '${AppLocalizations.of(context)!.main_type} ${notifier.isFavourite ? notifier.selectedFavouritePokemon!.types.first.type!.name! : notifier.selectedPokemon!.types.first.type!.name}',
             style: AppStyles.appTheme.textTheme.bodyMedium,
           ),
-          notifier.selectedPokemon!.types.length == 2
-              ? Text(
-                  '${AppLocalizations.of(context)!.sec_type} ${notifier.selectedPokemon!.types[1].type!.name}',
-                  style: AppStyles.appTheme.textTheme.bodyMedium,
-                )
-              : Container(),
+          !notifier.isFavourite
+              ? notifier.selectedPokemon!.types.length == 2
+                  ? Text(
+                      '${AppLocalizations.of(context)!.sec_type} ${notifier.selectedPokemon!.types[1].type!.name}',
+                      style: AppStyles.appTheme.textTheme.bodyMedium,
+                    )
+                  : Container()
+              : notifier.selectedFavouritePokemon!.types.length == 2
+                  ? Text(
+                      '${AppLocalizations.of(context)!.sec_type} ${notifier.selectedFavouritePokemon!.types[1].type!.name}',
+                      style: AppStyles.appTheme.textTheme.bodyMedium,
+                    )
+                  : Container(),
         ],
       ),
     );

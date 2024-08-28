@@ -7,7 +7,7 @@ class PokemonProvider with ChangeNotifier, DiagnosticableTreeMixin {
   final List<Result> pokemonHomeList = [];
   final List<Pokemon> pokemonList = [];
   final List<Pokemon> pokemonFavouriteList = [];
-
+  bool isFavourite = false;
   Pokemon? selectedPokemon;
   Pokemon? selectedFavouritePokemon;
   void onFavoriteListUpdated() {

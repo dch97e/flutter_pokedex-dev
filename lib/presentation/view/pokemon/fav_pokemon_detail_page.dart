@@ -6,7 +6,6 @@ import 'package:flutter_pokedex/presentation/common/provider/pokemon_provider.da
 import 'package:flutter_pokedex/presentation/common/resources/app_colors.dart';
 import 'package:flutter_pokedex/presentation/common/widget/detail_body.dart';
 import 'package:flutter_pokedex/presentation/common/widget/error/error_overlay.dart';
-import 'package:flutter_pokedex/presentation/common/widget/loading/loading_overlay.dart';
 import 'package:flutter_pokedex/presentation/view/pokemon/viewmodel/pokemon_view_model.dart';
 import 'package:go_router/go_router.dart';
 //import 'package:share_plus/share_plus.dart';
@@ -28,6 +27,13 @@ class _FavPokemonDetailPageState extends State<FavPokemonDetailPage>
   @override
   void initState() {
     super.initState();
+    notifier.addListener(() {
+      if (mounted) {
+        _pokemonViewModel
+            .isFavoritePokemons(notifier.selectedFavouritePokemon!);
+      }
+    });
+    notifier.isFavourite = true;
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2))
           ..repeat();
@@ -37,19 +43,19 @@ class _FavPokemonDetailPageState extends State<FavPokemonDetailPage>
           //LoadingOverlay.show(context);
           break;
         case Status.COMPLETED:
-          LoadingOverlay.hide();
+          // LoadingOverlay.hide();
           setState(() {
             isFavorite = event.data;
           });
           break;
         case Status.ERROR:
-          LoadingOverlay.hide();
+          // LoadingOverlay.hide();
           if (mounted) {
             ErrorOverlay.of(context).show(event.error, onRetry: () {});
           }
           break;
         default:
-          LoadingOverlay.hide();
+          // LoadingOverlay.hide();
           break;
       }
     });

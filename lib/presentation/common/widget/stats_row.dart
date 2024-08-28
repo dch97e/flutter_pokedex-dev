@@ -19,10 +19,15 @@ class StatsRow extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            notifier.selectedPokemon!.stats[index].stat!.name!.toUpperCase(),
+            notifier.isFavourite
+                ? notifier.selectedFavouritePokemon!.stats[index].stat!.name!
+                    .toUpperCase()
+                : notifier.selectedPokemon!.stats[index].stat!.name!
+                    .toUpperCase(),
             textAlign: TextAlign.center,
           ),
-          Text('${notifier.selectedPokemon!.stats[index].base_stat}'),
+          Text(
+              '${notifier.isFavourite ? notifier.selectedFavouritePokemon!.stats[index].base_stat : notifier.selectedPokemon!.stats[index].base_stat}'),
         ],
       ),
     );

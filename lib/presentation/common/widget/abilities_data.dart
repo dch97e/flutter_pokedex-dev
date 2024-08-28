@@ -11,11 +11,17 @@ class AbilitiesData extends StatelessWidget {
       shrinkWrap: true,
       padding: const EdgeInsets.only(left: 10),
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: notifier.selectedPokemon!.abilities.length,
+      itemCount: notifier.isFavourite
+          ? notifier.selectedFavouritePokemon!.abilities.length
+          : notifier.selectedPokemon!.abilities.length,
       itemBuilder: (context, index) {
         return Text(
-          notifier.selectedPokemon!.abilities[index].ability!.name!
-              .toUpperCase(),
+          notifier.isFavourite
+              ? notifier
+                  .selectedFavouritePokemon!.abilities[index].ability!.name!
+                  .toUpperCase()
+              : notifier.selectedPokemon!.abilities[index].ability!.name!
+                  .toUpperCase(),
           style: const TextStyle(color: Colors.black),
         );
       },

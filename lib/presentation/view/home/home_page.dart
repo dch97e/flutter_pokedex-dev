@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pokedex/di/app_modules.dart';
 import 'package:flutter_pokedex/presentation/common/localization/app_localizations.dart';
+import 'package:flutter_pokedex/presentation/common/provider/pokemon_provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final notifier = inject<PokemonProvider>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +30,14 @@ class _HomePageState extends State<HomePage> {
       height: 60,
       selectedIndex: widget.navigationShell.currentIndex,
       onDestinationSelected: (index) {
+        if (index == 0) {
+          notifier.isFavourite = false;
+          notifier.onFavoriteListUpdated();
+        } else {
+          notifier.isFavourite = true;
+          notifier.onFavoriteListUpdated();
+        }
+
         widget.navigationShell.goBranch(
           index,
           initialLocation: index == widget.navigationShell.currentIndex,

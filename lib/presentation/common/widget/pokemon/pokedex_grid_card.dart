@@ -12,18 +12,22 @@ class PokedexGridCard extends StatelessWidget {
   final int index;
   final String route;
   final notifier = inject<PokemonProvider>();
+  final bool isFavourite;
   PokedexGridCard(
       {super.key,
       required this.pokemon,
       required this.route,
-      required this.index});
+      required this.index,
+      required this.isFavourite});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        notifier.selectedPokemon = pokemon;
-        notifier.selectedFavouritePokemon = pokemon;
+        if (!isFavourite) notifier.selectedPokemon = pokemon;
+
+        if (isFavourite) notifier.selectedFavouritePokemon = pokemon;
+
         context.go(route);
       },
       child: Container(
